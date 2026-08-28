@@ -54,6 +54,10 @@ import * as Attribr from '@mrvl/attribr-react-native';
 
 // Once, at app start:
 Attribr.initialize({
+  // Use a Client key (sdk_ingest scope) from Settings → API Keys, never a
+  // Full key — this string ships inside your JS bundle and is extractable
+  // by anyone who unpacks the app. A Client key can only submit events; it
+  // cannot read your Attribr dashboard data even if extracted. See SECURITY.md.
   apiKey: 'attr_live_yourkey…',       // from your Attribr dashboard
   appId: 'com.yourcompany.yourapp',   // omit if expo-application is installed — it's read automatically
   supabaseAnonKey: 'eyJ...',          // required only for trackRevenue() — see below
