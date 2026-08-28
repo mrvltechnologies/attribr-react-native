@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "prepare": "npm run build",
     "type-check": "tsc --noEmit",
     "test": "jest",
     "lint": "eslint src --ext .ts"

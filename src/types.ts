@@ -54,6 +54,18 @@ export interface TrackLaunchOptions {
   appVersion?: string;
   osVersion?: string;
   platform?: Platform;
+  /**
+   * Returning-user classification for this launch, if the caller tracks
+   * last-seen state itself (e.g. in AsyncStorage) — the package has no
+   * opinion on what counts as "returning" vs "re-engagement" (that threshold
+   * varies per app), so it never computes this itself. Sent as install_type
+   * on attribr-track when provided; omitted entirely otherwise.
+   */
+  installType?: 'new_install' | 'returning' | 're_engagement';
+  /** Sent as re_engagement — set alongside installType: 're_engagement'. */
+  reEngagement?: boolean;
+  /** Sent as days_since_last_seen — set alongside installType: 're_engagement'. */
+  daysSinceLastSeen?: number;
 }
 
 export interface TrackEventInput {

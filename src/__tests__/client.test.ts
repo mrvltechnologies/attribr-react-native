@@ -135,6 +135,32 @@ describe('Attribr Tier 1 client', () => {
       expect(options.headers['X-Attribr-Key']).toBe('attr_live_test');
       expect(options.headers['Authorization']).toBeUndefined();
     });
+
+    // Returning-user classification is caller-computed (the package has no
+    // opinion on what threshold counts as "returning" vs "re-engagement") —
+    // these prove the fields pass through to the payload as snake_case when
+    // supplied, and are omitted entirely when not.
+    it('includes install_type/re_engagement/days_since_last_seen when supplied', async () => {
+      client.initialize({ apiKey: 'attr_live_test', appId: 'com.test.app', getDeviceHash: async () => VALID_HASH });
+      client.setConsent('granted');
+      await client.trackLaunch({ installType: 're_engagement', reEngagement: true, daysSinceLastSeen: 45 });
+      const [, options] = (global.fetch as jest.Mock).mock.calls[0];
+      const body = JSON.parse(options.body);
+      expect(body.install_type).toBe('re_engagement');
+      expect(body.re_engagement).toBe(true);
+      expect(body.days_since_last_seen).toBe(45);
+    });
+
+    it('omits install_type/re_engagement/days_since_last_seen entirely when not supplied', async () => {
+      client.initialize({ apiKey: 'attr_live_test', appId: 'com.test.app', getDeviceHash: async () => VALID_HASH });
+      client.setConsent('granted');
+      await client.trackLaunch();
+      const [, options] = (global.fetch as jest.Mock).mock.calls[0];
+      const body = JSON.parse(options.body);
+      expect(body).not.toHaveProperty('install_type');
+      expect(body).not.toHaveProperty('re_engagement');
+      expect(body).not.toHaveProperty('days_since_last_seen');
+    });
   });
 
   // ── trackRevenue / Authorization ─────────────────────────────────────────

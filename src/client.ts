@@ -184,6 +184,9 @@ export async function trackLaunch(options?: TrackLaunchOptions): Promise<TrackRe
     app_version: options?.appVersion,
     os_version: options?.osVersion ?? (platformModule ? String(platformModule.Version) : undefined),
     platform: options?.platform ?? (platformModule ? (platformModule.OS as string) : undefined),
+    install_type: options?.installType,
+    re_engagement: options?.reEngagement,
+    days_since_last_seen: options?.daysSinceLastSeen,
   });
 }
 
