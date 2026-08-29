@@ -1,5 +1,40 @@
 # @mrvl/attribr-react-native — Changelog
 
+## 0.2.1 — 2026-08-29 — trackEvent backend gap closed
+
+`0.2.0` documented that `attribr-track` silently ignored `event_name`/
+`value`/`currency`/`metadata` on `trackEvent()` calls. That gap is now
+closed at the backend (`Attribr-by-MRVL/supabase/functions/attribr-track`,
+deployed version 45) — no change was needed in this package, since the
+client was already sending the correct payload shape; the backend simply
+wasn't reading it.
+
+`event_name` is now the sole discriminator the backend uses to route a
+request to a distinct custom-event path (`attribr_raw_events.event_type =
+'custom'`) instead of the launch/install path — `trackLaunch()` never sends
+`event_name`, so its behaviour is completely unaffected. Verified against
+production through this package's real `trackEvent()` and `trackLaunch()`
+methods:
+- `trackEvent()` now persists `event_name`/`value`/`currency`/`metadata`
+  in a distinct row, confirmed by inspecting the resulting
+  `attribr_raw_events` row directly (`event_type: 'custom'`), with zero
+  `attribr_installs` side effect — a custom event no longer requires a
+  prior `trackLaunch()` call for the same device and does not consume
+  install quota.
+- `trackLaunch()` re-verified unaffected — still creates the same
+  `attribr_installs`/`attribr_raw_events` (`event_type: 'install'`) rows as
+  before.
+- No `subscription_revenue_ledger`, `earnings`, or `attribr_attributions`
+  rows were created by either call — confirms the Rippl/revenue-ledger
+  boundary is untouched.
+
+Synthetic rows from verification deleted; 0 remaining across all tables
+checked.
+
+`README.md`, `client.ts`, `types.ts`, and `examples/basic-usage.ts` updated
+to remove the now-resolved caveat. Package version bumped `0.2.0` →
+`0.2.1`. Still git-dependency only, not published to npm.
+
 ## 0.2.0 — 2026-08-29 — Full API surface proven; trackEvent backend gap documented
 
 Still git-dependency only, not published to npm.

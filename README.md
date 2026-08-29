@@ -108,17 +108,19 @@ interface TrackResult {
 Full type definitions are in `src/types.ts`. See `examples/basic-usage.ts`
 for a worked example of every method.
 
-### `trackEvent()` — backend does not yet persist custom event data
+### `trackEvent()` — backend-supported as of 2026-08-29
 
-Confirmed against production (2026-08-29): `attribr-track` does not currently
-read or store `name`/`value`/`currency`/`metadata`. Calling `trackEvent()` is
-safe — it succeeds (200), is consent-gated, and never throws, same as every
-other method here — but it updates the launch/install record exactly as a
-plain `trackLaunch()` call would, and none of the custom-event fields are
-queryable afterward anywhere in Attribr's data. This is a backend gap, not a
-client bug, and this package cannot fix it (it's Tier 1: JS REST client
-only, no backend routes touched). Don't build a feature that assumes named
-custom events are currently distinguishable in Attribr's dashboard/data.
+`attribr-track` now persists `name`/`value`/`currency`/`metadata` for
+`trackEvent()` calls as a distinct row (`attribr_raw_events.event_type =
+'custom'`), separate from install/launch records — confirmed against
+production: the resulting row carries the exact `event_name`/`value`/
+`currency`/`metadata` sent, and creates zero `attribr_installs` side effect
+(a custom event does not require a prior `trackLaunch()` call and does not
+consume install quota). Fixed at the backend in
+`Attribr-by-MRVL/supabase/functions/attribr-track` — no change was needed
+in this package, since the client was already sending the correct payload;
+the backend simply wasn't reading it. See that repo's session notes for the
+fix if you need the exact detail.
 
 ### `trackRevenue()` needs `supabaseAnonKey` — this is not optional
 

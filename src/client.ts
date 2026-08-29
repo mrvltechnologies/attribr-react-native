@@ -191,18 +191,10 @@ export async function trackLaunch(options?: TrackLaunchOptions): Promise<TrackRe
 }
 
 /**
- * KNOWN BACKEND LIMITATION (confirmed 2026-08-29, not a client-side bug):
- * `attribr-track` does not currently read or persist `event_name`/`value`/
- * `currency`/`metadata` — verified by calling this method against production
- * and inspecting the resulting rows directly: the request succeeds (200) and
- * updates the install/launch record exactly as a plain `trackLaunch()` call
- * would, but no distinct "custom event" record is created anywhere, and none
- * of the fields above are queryable afterward. This is a real backend gap,
- * not something this package can fix (it isn't a native-app/backend repo
- * concern for this Tier 1 client to touch). Calling this method is safe and
- * matches the documented client-side contract (consent-gated, never throws),
- * but do not build a feature on the assumption that named custom events are
- * currently distinguishable in Attribr's data. See CHANGELOG.md.
+ * Backend-supported as of 2026-08-29: `attribr-track` persists `event_name`/
+ * `value`/`currency`/`metadata` as a distinct `attribr_raw_events` row
+ * (event_type: 'custom'), separate from install/launch records — verified
+ * against production. See CHANGELOG.md.
  */
 export async function trackEvent(event: TrackEventInput): Promise<TrackResult> {
   const g = guard('trackEvent');

@@ -69,10 +69,9 @@ export interface TrackLaunchOptions {
 }
 
 /**
- * See `trackEvent()`'s JSDoc in client.ts: `attribr-track` does not
- * currently persist `name`/`value`/`currency`/`metadata` distinctly — the
- * call succeeds and updates the launch record, but not as a queryable
- * custom event. Confirmed against production 2026-08-29.
+ * `attribr-track` persists these fields as a distinct custom-event record
+ * (event_type: 'custom') as of 2026-08-29 — see `trackEvent()`'s JSDoc in
+ * client.ts.
  */
 export interface TrackEventInput {
   name: string;
