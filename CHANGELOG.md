@@ -1,10 +1,10 @@
 # @mrvl/attribr-react-native — Changelog
 
-## Unreleased (still 0.1.0 in package.json — see note)
+## 0.2.0 — 2026-08-29 — Full API surface proven; trackEvent backend gap documented
 
-Two changes on top of the initial build, both already live at commit
-`68ad205acef507b1d0b378b68ffafa104961bcf9` (still git-dependency only, not
-published to npm — see "Pilot status" below, now updated):
+Still git-dependency only, not published to npm.
+
+Three changes on top of the initial 0.1.0 build:
 
 - `trackLaunch()`'s `TrackLaunchOptions` gained optional `installType` /
   `reEngagement` / `daysSinceLastSeen` fields, surfaced while migrating
@@ -19,14 +19,35 @@ published to npm — see "Pilot status" below, now updated):
   `build` script) for git dependencies. Verified end-to-end: a real
   `npm install git+https://...#<commit>` into a scratch project now
   builds and requires correctly.
+- **`trackEvent()` and `attributeInstall()` proven against production for
+  the first time** (previously implemented and unit-tested only). Both
+  called through the real installed package with a real MRVL app's
+  `sdk_ingest` key:
+  - `attributeInstall()` works correctly end-to-end — the resulting row
+    landed in `attribr_attributions` with the exact `source`/`utmSource`/
+    `utmCampaign` supplied, `rippl_promoter_id` correctly null (verified
+    the Rippl-specific lookup path only triggers for `source: 'rippl'`,
+    never touched here). Synthetic row deleted after verification.
+  - **`trackEvent()` surfaced a real backend gap**: `attribr-track` does
+    not currently read or persist `event_name`/`value`/`currency`/
+    `metadata` at all. The call succeeds (200) and updates the launch/
+    install record exactly as a plain `trackLaunch()` would, but no
+    distinct "custom event" record is created anywhere — confirmed by
+    inspecting the resulting `attribr_installs` and `attribr_raw_events`
+    rows directly (`event_type: 'install'`, `source: 'organic'`, zero
+    trace of the custom fields sent). This is a backend limitation, not a
+    package bug, and out of this package's scope to fix (Tier 1: JS REST
+    client only, no backend routes touched here). Documented prominently
+    in `client.ts`, `types.ts`, `README.md`, and `examples/basic-usage.ts`
+    so nobody builds a feature assuming named custom events are currently
+    distinguishable in Attribr's data. Synthetic rows deleted after
+    verification.
 
-No version bump was made for this change — see "Version note" below.
-
-### Pilot status — UPDATED
+### Pilot status
 
 All four apps named in the "Why this package exists" section below have
-now migrated onto this package, all pinned to commit `68ad205...`, all
-production-verified (real `attribr-track`/`attribr-revenue` calls against
+migrated onto this package, all pinned to commit `68ad205...`, all
+production-verified for `trackLaunch`/`trackRevenue` (real calls against
 the live backend, not just unit tests):
 
 | App | Migration commit | attribr-revenue used? |
@@ -36,19 +57,13 @@ the live backend, not just unit tests):
 | KonnectBusiness | `d410e12` | yes |
 | KonnectbyMRVL | `e88d059` | yes |
 
-`trackEvent()` and `attributeInstall()` are implemented and unit-tested
-but not yet exercised by any of the four pilot apps in production — none
-of them call custom events or referral attribution through this package
-yet. Treat those two methods as tested-but-unproven-in-the-field relative
-to `trackLaunch`/`trackRevenue`.
-
-### Version note
-
-`package.json` still reads `0.1.0` — the two changes above should have
-been `0.1.1` per semver, but weren't bumped at the time. Left uncorrected
-here rather than silently rewritten; see the accompanying publication
-readiness review for the recommended real version (`0.2.0`, reflecting
-real production adoption in four apps) if publication proceeds.
+`trackEvent()` and `attributeInstall()` are now proven against production
+(see above) but **not yet wired into any of the four pilot apps' actual
+product code** — the proof above was a direct package-level call, not an
+app integration. `attributeInstall()` is ready to adopt as-is.
+`trackEvent()` is client-side correct and safe to call, but don't wire it
+into a product feature that depends on named custom events being
+queryable until the backend gap above is closed.
 
 ## 0.1.0 — 2026-08-28 — Initial Tier 1 build
 

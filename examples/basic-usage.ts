@@ -38,6 +38,10 @@ async function onAppLaunch() {
 }
 
 // ── 4. Custom events ────────────────────────────────────────────────────
+// NOTE: attribr-track does not currently persist name/value/currency/
+// metadata distinctly (confirmed against production 2026-08-29) - this call
+// succeeds and updates the launch record, but isn't yet a queryable custom
+// event. See README "trackEvent() — backend does not yet persist..."
 
 async function onLevelComplete(level: number) {
   await Attribr.trackEvent({

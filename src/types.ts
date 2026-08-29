@@ -68,6 +68,12 @@ export interface TrackLaunchOptions {
   daysSinceLastSeen?: number;
 }
 
+/**
+ * See `trackEvent()`'s JSDoc in client.ts: `attribr-track` does not
+ * currently persist `name`/`value`/`currency`/`metadata` distinctly — the
+ * call succeeds and updates the launch record, but not as a queryable
+ * custom event. Confirmed against production 2026-08-29.
+ */
 export interface TrackEventInput {
   name: string;
   value?: number;

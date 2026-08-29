@@ -108,6 +108,18 @@ interface TrackResult {
 Full type definitions are in `src/types.ts`. See `examples/basic-usage.ts`
 for a worked example of every method.
 
+### `trackEvent()` — backend does not yet persist custom event data
+
+Confirmed against production (2026-08-29): `attribr-track` does not currently
+read or store `name`/`value`/`currency`/`metadata`. Calling `trackEvent()` is
+safe — it succeeds (200), is consent-gated, and never throws, same as every
+other method here — but it updates the launch/install record exactly as a
+plain `trackLaunch()` call would, and none of the custom-event fields are
+queryable afterward anywhere in Attribr's data. This is a backend gap, not a
+client bug, and this package cannot fix it (it's Tier 1: JS REST client
+only, no backend routes touched). Don't build a feature that assumes named
+custom events are currently distinguishable in Attribr's dashboard/data.
+
 ### `trackRevenue()` needs `supabaseAnonKey` — this is not optional
 
 `attribr-revenue` (unlike `attribr-track`/`attribr-attribute`) has
