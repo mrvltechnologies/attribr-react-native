@@ -1,4 +1,4 @@
-# @mrvl/attribr-react-native
+# @mrvltechnologies/attribr-react-native
 
 **Tier 1 — JS-only React Native / Expo client for Attribr.** No native module,
 no CocoaPods dependency, no Gradle dependency. Not yet published to npm — see
@@ -37,7 +37,7 @@ Not yet published to npm. Used first inside the MRVL portfolio (see
 ## Install (once published)
 
 ```bash
-npm install @mrvl/attribr-react-native
+npm install @mrvltechnologies/attribr-react-native
 ```
 
 Peer dependencies (both optional, but required for the default device-hash
@@ -50,7 +50,7 @@ npx expo install expo-application expo-crypto
 ## Quick start
 
 ```ts
-import * as Attribr from '@mrvl/attribr-react-native';
+import * as Attribr from '@mrvltechnologies/attribr-react-native';
 
 // Once, at app start:
 Attribr.initialize({

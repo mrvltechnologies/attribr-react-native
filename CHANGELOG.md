@@ -1,4 +1,17 @@
-# @mrvl/attribr-react-native — Changelog
+# @mrvltechnologies/attribr-react-native — Changelog
+
+## 0.2.2 — 2026-08-31 — package renamed from @mrvl to @mrvltechnologies
+
+The `@mrvl` npm scope was not owned by any account we controlled — first
+publish attempt failed at the registry (`E403`, then confirmed via
+`npm access list packages` returning empty for every account tried).
+Renamed the package to `@mrvltechnologies/attribr-react-native`, matching
+the npm organisation actually owned by this team (and consistent with the
+existing `github.com/mrvltechnologies` GitHub org). Pure rename — no
+runtime/API change. Updated `package.json` name, `README.md`,
+`examples/basic-usage.ts`, and `src/types.ts`'s top-of-file doc comment.
+`package-lock.json` regenerated. Still not published — this is the name
+the first publish will go out under.
 
 ## 0.2.1 — 2026-08-29 — trackEvent backend gap closed
 

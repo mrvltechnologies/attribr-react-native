@@ -3,7 +3,7 @@
  * a hypothetical IAP purchase object) — copy the relevant parts into your
  * app's own App.tsx / purchase-success handler.
  */
-import * as Attribr from '@mrvl/attribr-react-native';
+import * as Attribr from '@mrvltechnologies/attribr-react-native';
 
 // ── 1. Initialize once, at app start (e.g. top of App.tsx) ────────────────
 

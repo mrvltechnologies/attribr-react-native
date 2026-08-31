@@ -1,5 +1,5 @@
 /**
- * Tier 1 public types for @mrvl/attribr-react-native.
+ * Tier 1 public types for @mrvltechnologies/attribr-react-native.
  *
  * This is a JS-only REST client — see README.md for exactly what it does and
  * does not cover. It intentionally mirrors the real backend contracts already
