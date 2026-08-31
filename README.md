@@ -1,8 +1,8 @@
 # @mrvltechnologies/attribr-react-native
 
 **Tier 1 — JS-only React Native / Expo client for Attribr.** No native module,
-no CocoaPods dependency, no Gradle dependency. Not yet published to npm — see
-"Status" below.
+no CocoaPods dependency, no Gradle dependency, no Web SDK equivalent (see
+"What this is (and isn't)" below).
 
 ## What this is (and isn't)
 
@@ -25,16 +25,19 @@ history this package is meant to prevent from recurring.
   yourself, from your own IAP success handler, the same way every existing
   hand-rolled client in this portfolio already does.
 - A native module or Expo config plugin.
+- A Web/browser SDK. This package is React Native / Expo only — it does not
+  run in, and is not tested against, a browser or Node web server environment.
 
-Those are Tier 2, deliberately out of scope here, and not implemented in
-this repo. Do not claim otherwise in any integration doc.
+Those are Tier 2 (or out of scope entirely), and not implemented in this
+repo. Do not claim otherwise in any integration doc.
 
 ## Status
 
-Not yet published to npm. Used first inside the MRVL portfolio (see
-`CHANGELOG.md` for pilot status) before any public/npm release is considered.
+Public on npm. Originally built and pilot-tested internally across four MRVL
+portfolio apps before public release — see `CHANGELOG.md` for the full pilot
+history and version log.
 
-## Install (once published)
+## Install
 
 ```bash
 npm install @mrvltechnologies/attribr-react-native

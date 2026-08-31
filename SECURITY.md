@@ -31,6 +31,7 @@
 
 ## Reporting a vulnerability
 
-Report to the MRVL Technologies team via the same channel as other Attribr
-SDK issues — this package is currently used only internally within the MRVL
-portfolio and is not yet published externally.
+Please report security issues privately via GitHub Security Advisories:
+open the **Security** tab on this repository → **Report a vulnerability**.
+Do not open a public GitHub issue for a security report. We'll acknowledge
+reports as soon as possible and coordinate disclosure with you.

@@ -1,6 +1,6 @@
 {
   "name": "@mrvltechnologies/attribr-react-native",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Tier 1 JS-only Attribr client for React Native / Expo apps. No native module, no CocoaPods/Gradle dependency.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -47,7 +47,15 @@
     "mrvl"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrvltechnologies/attribr-react-native.git"
+  },
+  "homepage": "https://github.com/mrvltechnologies/attribr-react-native#readme",
+  "bugs": {
+    "url": "https://github.com/mrvltechnologies/attribr-react-native/issues"
+  },
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   }
 }

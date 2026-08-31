@@ -1,5 +1,31 @@
 # @mrvltechnologies/attribr-react-native — Changelog
 
+## 0.2.3 — 2026-08-31 — public release preparation
+
+Preparing for public npm + public GitHub release, matching the model
+Branch/AppsFlyer/Adjust already use for their React Native SDKs (public
+client SDK, MIT license; private backend, scoped client keys). No runtime
+behaviour change.
+
+- `publishConfig.access` changed from `restricted` to `public` —
+  private packages under an npm Organization require a paid plan
+  (confirmed via a real publish attempt: `E402 Payment Required`); a
+  public package is free and matches the intended distribution model.
+- Added `repository`/`homepage`/`bugs` fields pointing at
+  `github.com/mrvltechnologies/attribr-react-native`.
+- `README.md`: removed "not yet published" language (Status section now
+  describes the package as public), and Tier 2 exclusion list now
+  explicitly states "no Web SDK" rather than leaving it implicit.
+- `SECURITY.md`: replaced the placeholder reporting line with concrete
+  instructions (GitHub Security Advisories via the repo's Security tab)
+  — necessary once the repo is public and reachable by outside reporters.
+- Full security grep re-run across tracked files and complete git
+  history (attr_live_ keys, service-role/sb_secret literals, MRVL
+  bundle IDs, customer PII) — clean.
+
+The backend this package talks to (`Attribr-by-MRVL`) is not affected by
+or exposed through this release — it remains a separate, private repo.
+
 ## 0.2.2 — 2026-08-31 — package renamed from @mrvl to @mrvltechnologies
 
 The `@mrvl` npm scope was not owned by any account we controlled — first
