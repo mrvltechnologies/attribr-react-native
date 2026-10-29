@@ -87,6 +87,13 @@ async function post(
   body: Record<string, unknown>,
   opts?: { withAuth?: boolean },
 ): Promise<TrackResult> {
+  // Berea SDK-RN-01: resolveContext() may await a device hash long after a
+  // public method's entry-time consent check. Enforce the *current* policy
+  // at the single transport dispatch boundary, not merely before that await.
+  // Reset/reinitialization also invalidates outstanding async operations.
+  if (_state !== state || state.consent !== 'granted') {
+    return skip('consent_not_granted');
+  }
   const baseUrl = state.config.baseUrl ?? DEFAULT_BASE_URL;
   const headers: Record<string, string> = {
     'X-Attribr-Key': state.config.apiKey,
