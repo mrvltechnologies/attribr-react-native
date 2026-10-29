@@ -106,6 +106,47 @@ describe('Attribr Tier 1 client', () => {
     });
   });
 
+  // Berea SDK-RN-01: consent must be checked at fetch, not at method entry.
+  it.each(['trackLaunch', 'trackEvent', 'trackRevenue', 'attributeInstall'] as const)(
+    'does not dispatch %s after consent is revoked during async device hash',
+    async (method) => {
+      let resolveHash!: (hash: string) => void;
+      const delayedHash = new Promise<string>((resolve) => { resolveHash = resolve; });
+      client.initialize({
+        apiKey: 'attr_live_test',
+        appId: 'com.test.app',
+        supabaseAnonKey: ANON_KEY,
+        getDeviceHash: () => delayedHash,
+      });
+      client.setConsent('granted');
+      const pending = method === 'trackLaunch' ? client.trackLaunch()
+        : method === 'trackEvent' ? client.trackEvent({ name: 'race' })
+        : method === 'trackRevenue' ? client.trackRevenue({ transactionId: 'race', amount: 1, currency: 'USD' })
+        : client.attributeInstall({ code: 'promo-race' });
+      client.setConsent('revoked');
+      resolveHash(VALID_HASH);
+      const result = await pending;
+      expect(result).toEqual({ ok: false, skipped: true, reason: 'consent_not_granted' });
+      expect(global.fetch).not.toHaveBeenCalled();
+    },
+  );
+
+  it('does not dispatch a pending async operation after singleton reset and re-initialize', async () => {
+    let resolveHash!: (hash: string) => void;
+    client.initialize({
+      apiKey: 'old-key', appId: 'com.old.app',
+      getDeviceHash: () => new Promise<string>((resolve) => { resolveHash = resolve; }),
+    });
+    client.setConsent('granted');
+    const pending = client.trackLaunch();
+    client.resetForTesting();
+    client.initialize({ apiKey: 'new-key', appId: 'com.new.app', getDeviceHash: async () => VALID_HASH });
+    client.setConsent('granted');
+    resolveHash(VALID_HASH);
+    expect(await pending).toEqual({ ok: false, skipped: true, reason: 'consent_not_granted' });
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
   // ── trackLaunch ───────────────────────────────────────────────────────────
 
   describe('trackLaunch', () => {
